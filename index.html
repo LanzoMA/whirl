@@ -12,23 +12,23 @@
 
 <body>
     <main id="questionMenu" class="main-container">
-        <h1>Trivia From Whirl</h1>
+        <h1 class="title">Trivia From Whirl</h1>
 
-        <div>
-            <label for="questionQuantity">Number of questions:</label>
-            <input id="questionQuantity" type="number">
+        <div class="selectionSection">
+            <label for="questionQuantity" class="labelText">Number of Questions: </label>
+            <input id="questionQuantity" type="number" value="10" min="1" max="50">
         </div>
 
-        <h2>Categories</h2>
+        <div class="selectionSection">
+            <h2 class="labelText">Categories</h2>
 
-        <div id="categoriesSelector">
-
+            <div id="categoriesSelector" class="selectorContainer"></div>
         </div>
 
-        <h2>Question Difficulties</h2>
+        <div class="selectionSection">
+            <h2 class="labelText">Question Difficulties</h2>
 
-        <div id="difficultiesSelector">
-
+            <div id="difficultiesSelector" class="selectorContainer"></div>
         </div>
 
         <button class="btn" onclick="start()"><a href="">Start</a></button>

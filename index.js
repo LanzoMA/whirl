@@ -33,8 +33,9 @@ const lightSurfaceColor = '#2e2c2e';
 const incorrectAnswerColor = '#E71D36';
 
 async function getQuestionData() {
+    const url = `https://opentdb.com/api.php?amount=${totalQuestions}&type=multiple`
+
     try {
-        const url = `https://opentdb.com/api.php?amount=${totalQuestions}&type=multiple`
         const response = await fetch(url);
 
         if (!response.ok) throw new Error('Unable to locate resource');
@@ -252,15 +253,25 @@ const categories = [
     "Science: Gadgets"
 ];
 
+let categoriesSelector = document.getElementById("categoriesSelector");
+
+categoriesSelector.innerHTML = '<div id="categoriesSelector" class="selectorContainer">';
+
+for (category of categories) {
+    categoriesSelector.innerHTML += `<div class="chip toggleable">${category}</div>`;
+}
+
+categoriesSelector.innerHTML += '</div>';
+
+
 const difficulties = ['Easy', 'Medium', 'Hard'];
 
 let difficultiesSelector = document.getElementById("difficultiesSelector");
 
-difficultiesSelector.innerHTML = '<div id="difficultiesSelector">';
+difficultiesSelector.innerHTML = '<div id="difficultiesSelector" class="selectorContainer">';
 
 for (difficulty of difficulties) {
-    console.log(difficulty);
-    difficultiesSelector.innerHTML += `<div class="btn">${difficulty}</div>`;
+    difficultiesSelector.innerHTML += `<div class="chip toggleable">${difficulty}</div>`;
 }
 
 difficultiesSelector.innerHTML += '</div>';
