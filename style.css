@@ -1,0 +1,129 @@
+:root {
+    --background-color: #131313;
+    --text-color: #fff;
+    --surface-color: #242224;
+    --primary-color: #b29ee2;
+    --light-surface-color: #2e2c2e;
+    --green-color: #29ce60;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.main-container {
+    background-color: var(--surface-color);
+    padding: 1em;
+    position: relative;
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 0.5em 2em;
+    border: none;
+    border-radius: 0.5em;
+}
+
+#questionMenu {
+    width: 50vw;
+    height: 100svh;
+    margin: auto;
+    display: flexbox;
+    align-content: center;
+}
+
+#progressBar {
+    background-color: var(--surface-color);
+    height: 0.5em;
+    margin-top: 0.25em;
+    margin-bottom: 1em;
+    border-radius: 0.5em;
+    overflow: hidden;
+}
+
+#progressedBar {
+    background-color: var(--green-color);
+    width: 10%;
+    height: 100%;
+}
+
+#question {
+    background-color: var(--surface-color);
+    border-radius: 1em;
+    margin: auto;
+    padding: 1em;
+}
+
+#questionText {
+    margin-bottom: 1em;
+}
+
+#options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1em;
+}
+
+.optionBtn {
+    background-color: var(--light-surface-color);
+    /* margin: 0.5em; */
+    padding: 1em;
+    border-radius: 0.5em;
+    border: none;
+}
+
+.optionText {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+#powerupContainer {
+    height: fit-content;
+    width: fit-content;
+    margin: 1em 0;
+    padding: 0.25em;
+    background-color: var(--surface-color);
+    display: flex;
+    border-radius: 1em;
+}
+
+.powerup {
+    background-color: var(--light-surface-color);
+    height: 5em;
+    width: 5em;
+    margin: 0.5em;
+    border: none;
+    border-radius: 1em;
+    position: relative;
+}
+
+.powerupIcon {
+    color: #fff;
+}
+
+.powerupQuantity {
+    width: 2em;
+    height: 2em;
+    background-color: #eb1947;
+    border-radius: 1em;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
