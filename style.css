@@ -171,3 +171,7 @@ h2 {
 .selectionSection {
     margin-bottom: 0.5em;
 }
+
+.incorrect-selected {
+    background-color: #e71d36;
+}
