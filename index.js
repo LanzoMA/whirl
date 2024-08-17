@@ -32,6 +32,11 @@ let correctOption;
 const lightSurfaceColor = '#2e2c2e';
 const incorrectAnswerColor = '#E71D36';
 
+
+addCategorySelectors();
+addDifficultySelectors();
+
+
 async function getQuestionData() {
     const url = `https://opentdb.com/api.php?amount=${totalQuestions}&type=multiple`
 
@@ -42,13 +47,12 @@ async function getQuestionData() {
 
         const data = await response.json();
 
-        console.log(data);
-
         questions = data['results'];
 
         nextQuestion()
         updateCurrentQuestion()
     }
+
     catch (error) {
         console.log('Something went wrong')
         console.error(error);
@@ -142,8 +146,13 @@ function selectOption(option) {
 }
 
 function start() {
-    const content = document.getElementById("questionMenu");
-    content.innerHTML = `
+    updateHtml();
+    gameInit();
+    getQuestionData();
+}
+
+function updateHtml() {
+    document.getElementById("questionMenu").innerHTML = `
     <p>Score: </p>
 
     <p id="progressBarText"></p>
@@ -196,9 +205,6 @@ function start() {
             </div>
         </button>
     </div>`;
-
-    gameInit();
-    getQuestionData();
 }
 
 function gameInit() {
@@ -226,52 +232,78 @@ function gameInit() {
     skipQuestionPowerupText = document.getElementById("skipQuestionPowerupText");
 }
 
+function addCategorySelectors() {
+    const categories = [
+        "Any Category",
+        "General Knowledge",
+        "Entertainment: Books",
+        "Entertainment: Film",
+        "Entertainment: Music",
+        "Entertainment: Musicals & Theatres",
+        "Entertainment: Television",
+        "Entertainment: Video Games",
+        "Entertainment: Board Games",
+        "Science & Nature",
+        "Science: Computers",
+        "Science: Mathematics",
+        "Mythology",
+        "Sports",
+        "Geography",
+        "History",
+        "Politics",
+        "Art",
+        "Celebrities",
+        "Animals",
+        "Vehicles",
+        "Entertainment: Comics",
+        "Science: Gadgets"
+    ];
 
-const categories = [
-    "Any Category",
-    "General Knowledge",
-    "Entertainment: Books",
-    "Entertainment: Film",
-    "Entertainment: Music",
-    "Entertainment: Musicals & Theatres",
-    "Entertainment: Television",
-    "Entertainment: Video Games",
-    "Entertainment: Board Games",
-    "Science & Nature",
-    "Science: Computers",
-    "Science: Mathematics",
-    "Mythology",
-    "Sports",
-    "Geography",
-    "History",
-    "Politics",
-    "Art",
-    "Celebrities",
-    "Animals",
-    "Vehicles",
-    "Entertainment: Comics",
-    "Science: Gadgets"
-];
+    categories.forEach(category => {
+        const element = document.createElement('div');
 
-let categoriesSelector = document.getElementById("categoriesSelector");
+        element.classList.add('chip', 'toggleable');
+        element.textContent = category;
 
-categoriesSelector.innerHTML = '<div id="categoriesSelector" class="selectorContainer">';
+        if (category === 'Any Category') {
+            element.addEventListener('click', event => {
+                const categoryChipSelectors = document.getElementById('categoriesSelector').getElementsByClassName('chip');
 
-for (category of categories) {
-    categoriesSelector.innerHTML += `<div class="chip toggleable">${category}</div>`;
+                for (let categoryChipSelector of categoryChipSelectors) {
+                    categoryChipSelector.classList.toggle('enabled-selector');
+                }
+            });
+        }
+
+        else {
+            element.addEventListener('click', event => {
+                event.target.classList.toggle('enabled-selector');
+            });
+        }
+
+        document.getElementById("categoriesSelector").appendChild(element);
+    });
 }
 
-categoriesSelector.innerHTML += '</div>';
+function addDifficultySelectors() {
+    const difficulties = ['Easy', 'Medium', 'Hard'];
 
+    difficulties.forEach(difficulty => {
+        const element = document.createElement('div');
 
-const difficulties = ['Easy', 'Medium', 'Hard'];
+        element.classList.add('chip', 'toggleable');
+        element.textContent = difficulty;
 
-let difficultiesSelector = document.getElementById("difficultiesSelector");
+        element.addEventListener('click', event => {
+            const difficultyChipSelectors = document.getElementById('difficultiesSelector').getElementsByClassName('chip');
 
-difficultiesSelector.innerHTML = '<div id="difficultiesSelector" class="selectorContainer">';
+            for (let difficultyChipSelector of difficultyChipSelectors) {
+                difficultyChipSelector.classList.remove('enabled-selector');
+            }
 
-for (difficulty of difficulties) {
-    difficultiesSelector.innerHTML += `<div class="chip toggleable">${difficulty}</div>`;
+            event.target.classList.add('enabled-selector');
+        });
+
+        document.getElementById("difficultiesSelector").appendChild(element);
+    });
 }
-
-difficultiesSelector.innerHTML += '</div>';

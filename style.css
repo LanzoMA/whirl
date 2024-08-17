@@ -159,6 +159,10 @@ h2 {
     border-radius: 0.25em;
 }
 
+.enabled-selector {
+    background-color: var(--green-color);
+}
+
 .toggleable:hover {
     background-color: var(--green-color);
     cursor: pointer;
