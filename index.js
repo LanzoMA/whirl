@@ -14,36 +14,39 @@ let quizComplete = false;
 let questions;
 let correctOption;
 
+const categories = [
+    "Any Category", // 
+    "General Knowledge", // 9
+    "Entertainment: Books", // 10
+    "Entertainment: Film", // 11
+    "Entertainment: Music", // 12
+    "Entertainment: Musicals & Theatres", // 13
+    "Entertainment: Television", // 14
+    "Entertainment: Video Games", // 15
+    "Entertainment: Board Games",
+    "Science & Nature",
+    "Science: Computers",
+    "Science: Mathematics",
+    "Mythology",
+    "Sports",
+    "Geography",
+    "History",
+    "Politics",
+    "Art",
+    "Celebrities",
+    "Animals",
+    "Vehicles",
+    "Entertainment: Comics",
+    "Science: Gadgets"
+];
+
+let categorySelected;
+let difficultySelected;
+
 addCategorySelectors();
 addDifficultySelectors();
 
 function addCategorySelectors() {
-    const categories = [
-        "Any Category",
-        "General Knowledge",
-        "Entertainment: Books",
-        "Entertainment: Film",
-        "Entertainment: Music",
-        "Entertainment: Musicals & Theatres",
-        "Entertainment: Television",
-        "Entertainment: Video Games",
-        "Entertainment: Board Games",
-        "Science & Nature",
-        "Science: Computers",
-        "Science: Mathematics",
-        "Mythology",
-        "Sports",
-        "Geography",
-        "History",
-        "Politics",
-        "Art",
-        "Celebrities",
-        "Animals",
-        "Vehicles",
-        "Entertainment: Comics",
-        "Science: Gadgets"
-    ];
-
     categories.forEach(category => {
         const element = document.createElement('div');
 
@@ -52,7 +55,25 @@ function addCategorySelectors() {
 
         if (category === 'Any Category') {
             element.addEventListener('click', event => {
+
                 const categoryChipSelectors = document.getElementById('categoriesSelector').getElementsByClassName('chip');
+
+                if (event.target.classList.contains('enabled-selector')) {
+                    for (let categoryChipSelector of categoryChipSelectors) {
+                        categoryChipSelector.classList.add('enabled-selector');
+                    }
+
+                    categorySelected = undefined;
+                }
+
+                else {
+                    for (let categoryChipSelector of categoryChipSelectors) {
+                        categoryChipSelector.classList.remove('enabled-selector');
+                    }
+
+                    categorySelected = category
+                }
+
 
                 for (let categoryChipSelector of categoryChipSelectors) {
                     categoryChipSelector.classList.toggle('enabled-selector');
@@ -62,6 +83,14 @@ function addCategorySelectors() {
 
         else {
             element.addEventListener('click', event => {
+                categorySelected = category
+
+                const categoryChipSelectors = document.getElementById('categoriesSelector').getElementsByClassName('chip');
+
+                for (let categoryChipSelector of categoryChipSelectors) {
+                    categoryChipSelector.classList.remove('enabled-selector');
+                }
+
                 event.target.classList.toggle('enabled-selector');
             });
         }
@@ -80,6 +109,8 @@ function addDifficultySelectors() {
         element.textContent = difficulty;
 
         element.addEventListener('click', event => {
+            difficultySelected = difficulty.toLowerCase();
+
             const difficultyChipSelectors = document.getElementById('difficultiesSelector').getElementsByClassName('chip');
 
             for (let difficultyChipSelector of difficultyChipSelectors) {
@@ -94,7 +125,25 @@ function addDifficultySelectors() {
 }
 
 async function getQuestionData() {
-    const url = `https://opentdb.com/api.php?amount=${totalQuestions}&type=multiple`;
+    let categoryId;
+
+    if (categorySelected === 'Any Category') {
+        categoryId = undefined;
+    }
+
+    else {
+        categories.forEach((category, index) => {
+            if (category === categorySelected) {
+                categoryId = index + 8;
+            }
+        });
+    }
+
+    const url = (categoryId === undefined)
+        ? `https://opentdb.com/api.php?amount=${totalQuestions}&type=multiple&difficulty=${difficultySelected}`
+        : `https://opentdb.com/api.php?amount=${totalQuestions}&type=multiple&difficulty=${difficultySelected}&category=${categoryId}`;
+
+    console.log(url);
 
     try {
         const response = await fetch(url);
@@ -117,7 +166,7 @@ async function getQuestionData() {
 
 function updateProgressBar() {
     progressBarText.innerText = `${answeredQuestions}/${totalQuestions}`
-    progressedBar.style.width = `${answeredQuestions / totalQuestions * 100}%`;
+    progressedBar.style.width = `${(answeredQuestions / totalQuestions) * 100}%`;
 }
 
 function updateCurrentQuestion() {
@@ -203,6 +252,23 @@ function selectOption(option) {
 
 function start() {
     totalQuestions = document.getElementById('questionQuantity').value;
+
+    if (totalQuestions > 50 || totalQuestions === '') {
+        window.alert('Select the numbers of questions to be a value between 1 and 50');
+        return;
+    }
+
+
+    if (categorySelected === undefined) {
+        window.alert('A category has not been selected');
+        return;
+    }
+
+    if (difficultySelected === undefined) {
+        window.alert('A difficulty has not been selected');
+        return;
+    }
+
     updateHtml();
     gameInit();
     getQuestionData();
