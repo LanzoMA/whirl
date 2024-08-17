@@ -308,20 +308,22 @@ function updateHtml() {
 
     <div id="powerupContainer">
         <button class="powerup" id="fiftyFiftyPowerup" onclick="fiftyFifty()">
+            <span class="powerup-icon-small">50<br>50</span>
             <div class="powerupQuantity">
                 <span id="fiftyFiftyPowerupText">2</span>
             </div>
         </button>
 
         <button class="powerup" id="doubleScorePowerup" onclick="doubleScore()">
+            <span class="powerup-icon-large">x2</span>
             <div class="powerupQuantity">
                 <span id="doubleScorePowerupText">2</span>
             </div>
         </button>
 
         <button class="powerup" id="skipQuestionPowerup" onclick="skipQuestion()">
-            <span class="material-symbols-outlined powerupIcon" style="font-size: 3rem;">
-                skip_next
+            <span class="powerup-icon-small">
+                Skip
             </span>
             <div class="powerupQuantity">
                 <span id="skipQuestionPowerupText">2</span>

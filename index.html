@@ -6,27 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whirl</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
 <body>
     <main id="questionMenu" class="main-container">
         <h1 class="title">Trivia From Whirl</h1>
 
-        <div class="selectionSection">
+        <div class="selectionSection" id="questionQuantitySelector">
             <label for="questionQuantity" class="labelText">Number of Questions: </label>
             <input id="questionQuantity" type="number" value="10" min="1" max="50">
         </div>
 
         <div class="selectionSection">
-            <h2 class="labelText">Categories</h2>
+            <h2 class="labelText">Category</h2>
 
             <div id="categoriesSelector" class="selectorContainer"></div>
         </div>
 
         <div class="selectionSection">
-            <h2 class="labelText">Question Difficulties</h2>
+            <h2 class="labelText">Question Difficulty</h2>
 
             <div id="difficultiesSelector" class="selectorContainer"></div>
         </div>
