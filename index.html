@@ -10,20 +10,20 @@
 
 <body>
     <main id="questionMenu" class="main-container">
-        <h1 class="title">Trivia From Whirl</h1>
+        <h1>Trivia From Whirl</h1>
 
-        <div class="selectionSection" id="questionQuantitySelector">
+        <div class="section" id="questionQuantitySelector">
             <label for="questionQuantity" class="labelText">Number of Questions: </label>
-            <input id="questionQuantity" type="number" value="10" min="1" max="50">
+            <input id="questionQuantity" type="number" value="10" min="5" max="50">
         </div>
 
-        <div class="selectionSection">
+        <div class="section">
             <h2 class="labelText">Category</h2>
 
             <div id="categoriesSelector" class="selectorContainer"></div>
         </div>
 
-        <div class="selectionSection">
+        <div class="section">
             <h2 class="labelText">Question Difficulty</h2>
 
             <div id="difficultiesSelector" class="selectorContainer"></div>
@@ -31,6 +31,94 @@
 
         <button class="btn" onclick="start()">Start</button>
     </main>
+
+    <template id="questionTemplate">
+        <div class="section">
+            <div class="stats-display">
+                <p>Lives: <span id="livesText"></span></p>
+                <p>Question: <span id="scoreText"></span></p>
+            </div>
+
+            <div id="progressBar" class="progress-bar">
+                <div id="progressedBar" class="progress-bar-fill"></div>
+            </div>
+        </div>
+
+        <div id="question" class="section">
+            <p id="questionText" class="section"></p>
+
+            <div id="options">
+                <button class="btn" onclick="selectOption(0)">
+                    <span class="optionText" id="optionLabel1"></span>
+                </button>
+
+                <button class="btn" onclick="selectOption(1)">
+                    <span class="optionText" id="optionLabel2"></span>
+                </button>
+
+                <button class="btn" onclick="selectOption(2)">
+                    <span class="optionText" id="optionLabel3"></span>
+                </button>
+
+                <button class="btn" onclick="selectOption(3)">
+                    <span class="optionText" id="optionLabel4"></span>
+                </button>
+            </div>
+        </div>
+
+        <div id="powerupContainer" class="container">
+            <button class="powerup" id="fiftyFiftyPowerup" onclick="fiftyFifty()">
+                <span class="powerup-icon-small">50<br>50</span>
+                <div class="powerupQuantity">
+                    <span id="fiftyFiftyPowerupText" class="small-text">2</span>
+                </div>
+            </button>
+
+            <button class="powerup" id="doubleScorePowerup" onclick="doubleScore()">
+                <span class="powerup-icon-large">x2</span>
+                <div class="powerupQuantity">
+                    <span id="doubleScorePowerupText" class="small-text">2</span>
+                </div>
+            </button>
+
+            <button class="powerup" id="skipQuestionPowerup" onclick="skipQuestion()">
+                <span class="powerup-icon-small">
+                    Skip
+                </span>
+                <div class="powerupQuantity">
+                    <span id="skipQuestionPowerupText" class="small-text">2</span>
+                </div>
+            </button>
+        </div>
+    </template>
+
+    <template id="gameOverTemplate">
+        <div id="question" class="section">
+            <p id="questionText" class="section"></p>
+
+            <div id="options">
+                <button class="btn" onclick="selectOption(0)">
+                    <span class="optionText" id="optionLabel1"></span>
+                </button>
+
+                <button class="btn" onclick="selectOption(1)">
+                    <span class="optionText" id="optionLabel2"></span>
+                </button>
+
+                <button class="btn" onclick="selectOption(2)">
+                    <span class="optionText" id="optionLabel3"></span>
+                </button>
+
+                <button class="btn" onclick="selectOption(3)">
+                    <span class="optionText" id="optionLabel4"></span>
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <template id="quizCompleteTemplate">
+        <h1>Your Final Score: 1000</h1>
+    </template>
 
     <script src="index.js"></script>
 </body>

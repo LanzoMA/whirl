@@ -1,11 +1,14 @@
-let progressBarText;
+let livesText;
+let scoreText;
 let progressedBar;
+
 let questionText;
 let optionBtns;
 let fiftyFiftyPowerupText;
 let doubleScorePowerupText;
 let skipQuestionPowerupText;
 
+let lives;
 let answeredQuestions = 0;
 let totalQuestions;
 
@@ -15,14 +18,14 @@ let questions;
 let correctOption;
 
 const categories = [
-    "Any Category", // 
-    "General Knowledge", // 9
-    "Entertainment: Books", // 10
-    "Entertainment: Film", // 11
-    "Entertainment: Music", // 12
-    "Entertainment: Musicals & Theatres", // 13
-    "Entertainment: Television", // 14
-    "Entertainment: Video Games", // 15
+    "Any Category",
+    "General Knowledge",
+    "Entertainment: Books",
+    "Entertainment: Film",
+    "Entertainment: Music",
+    "Entertainment: Musicals & Theatres",
+    "Entertainment: Television",
+    "Entertainment: Video Games",
     "Entertainment: Board Games",
     "Science & Nature",
     "Science: Computers",
@@ -125,25 +128,14 @@ function addDifficultySelectors() {
 }
 
 async function getQuestionData() {
-    let categoryId;
+    const categoryId = (categorySelected === 'Any Category')
+        ? undefined
+        : categories.findIndex(category => category === categorySelected) + 8;
 
-    if (categorySelected === 'Any Category') {
-        categoryId = undefined;
-    }
 
-    else {
-        categories.forEach((category, index) => {
-            if (category === categorySelected) {
-                categoryId = index + 8;
-            }
-        });
-    }
+    let url = `https://opentdb.com/api.php?amount=${totalQuestions}&type=multiple&difficulty=${difficultySelected}`;
 
-    const url = (categoryId === undefined)
-        ? `https://opentdb.com/api.php?amount=${totalQuestions}&type=multiple&difficulty=${difficultySelected}`
-        : `https://opentdb.com/api.php?amount=${totalQuestions}&type=multiple&difficulty=${difficultySelected}&category=${categoryId}`;
-
-    console.log(url);
+    if (categoryId !== undefined) url += `&category=${categoryId}`;
 
     try {
         const response = await fetch(url);
@@ -154,18 +146,20 @@ async function getQuestionData() {
 
         questions = data['results'];
 
-        updateProgressBar()
-        updateCurrentQuestion()
+        return new Promise((resolve, reject) => {
+            resolve('Success')
+        });
     }
 
     catch (error) {
-        console.log('Something went wrong')
-        console.error(error);
+        return new Promise((resolve, reject) => {
+            reject(error)
+        });
     }
 }
 
 function updateProgressBar() {
-    progressBarText.innerText = `${answeredQuestions}/${totalQuestions}`
+    scoreText.innerText = `${answeredQuestions + 1}/${totalQuestions}`
     progressedBar.style.width = `${(answeredQuestions / totalQuestions) * 100}%`;
 }
 
@@ -173,6 +167,8 @@ function updateCurrentQuestion() {
     questionText.innerHTML = `${questions[answeredQuestions]['question']}`;
 
     correctOption = Math.floor(Math.random() * 4);
+
+    console.log(correctOption);
 
     optionLabels[correctOption].innerHTML = `${questions[answeredQuestions]['correct_answer']}`;
 
@@ -233,27 +229,51 @@ function skipQuestion() {
     updateCurrentQuestion()
 }
 
+function showCorrectAnswer() {
+    optionBtns[correctOption].classList.add('enabled-selector');
+}
+
 function selectOption(option) {
     if (option != correctOption) {
         optionBtns[option].classList.add('incorrect-selected');
-        return
+        lives--;
+        livesText.textContent = lives;
+
+        if (lives == 0) {
+            optionBtns.forEach(optionBtn => {
+                optionBtn.disabled = true;
+            })
+
+            let powerupsBtns = Array.from(document.getElementById('powerupContainer').getElementsByClassName('powerup'));
+
+            powerupsBtns.forEach(powerupsBtn => {
+                powerupsBtn.disabled = true;
+            });
+
+            showCorrectAnswer();
+
+            window.alert(`Game over! You ran out of lives. You reached a score of ${answeredQuestions}`);
+        }
+
+        return;
     }
 
     answeredQuestions++;
     updateProgressBar()
 
     if (answeredQuestions == totalQuestions) {
-        questionText.innerText = 'You win'
+        document.getElementById('questionMenu').innerHTML = document.getElementById('quizCompleteTemplate').innerHTML;
+
         return;
     }
 
     updateCurrentQuestion();
 }
 
-function start() {
+async function start() {
     totalQuestions = document.getElementById('questionQuantity').value;
 
-    if (totalQuestions > 50 || totalQuestions === '') {
+    if (totalQuestions > 50 || totalQuestions < 5 || totalQuestions === '') {
         window.alert('Select the numbers of questions to be a value between 1 and 50');
         return;
     }
@@ -269,80 +289,32 @@ function start() {
         return;
     }
 
-    updateHtml();
-    gameInit();
-    getQuestionData();
+    getQuestionData().then(updateHtml)
+        .then(gameInit)
+        .then(() => {
+            updateProgressBar();
+            updateCurrentQuestion();
+            lives = Math.round((totalQuestions / 10) * 3);
+            livesText.textContent = lives;
+        })
+        .catch((error) => console.error(error));
 }
 
 function updateHtml() {
-    document.getElementById("questionMenu").innerHTML = `
-    <p>Score: </p>
-
-    <p id="progressBarText"></p>
-
-    <div id="progressBar">
-        <div id="progressedBar"></div>
-    </div>
-
-    <div id="question">
-        <p id="questionText"></p>
-
-        <div id="options">
-            <button class="optionBtn" id="optionBtn1" onclick="selectOption(0)">
-                <span class="optionText" id="optionLabel1"></span>
-            </button>
-
-            <button class="optionBtn" id="optionBtn2" onclick="selectOption(1)">
-                <span class="optionText" id="optionLabel2"></span>
-            </button>
-
-            <button class="optionBtn" id="optionBtn3" onclick="selectOption(2)">
-                <span class="optionText" id="optionLabel3"></span>
-            </button>
-
-            <button class="optionBtn" id="optionBtn4" onclick="selectOption(3)">
-                <span class="optionText" id="optionLabel4"></span>
-            </button>
-        </div>
-    </div>
-
-    <div id="powerupContainer">
-        <button class="powerup" id="fiftyFiftyPowerup" onclick="fiftyFifty()">
-            <span class="powerup-icon-small">50<br>50</span>
-            <div class="powerupQuantity">
-                <span id="fiftyFiftyPowerupText">2</span>
-            </div>
-        </button>
-
-        <button class="powerup" id="doubleScorePowerup" onclick="doubleScore()">
-            <span class="powerup-icon-large">x2</span>
-            <div class="powerupQuantity">
-                <span id="doubleScorePowerupText">2</span>
-            </div>
-        </button>
-
-        <button class="powerup" id="skipQuestionPowerup" onclick="skipQuestion()">
-            <span class="powerup-icon-small">
-                Skip
-            </span>
-            <div class="powerupQuantity">
-                <span id="skipQuestionPowerupText">2</span>
-            </div>
-        </button>
-    </div>`;
+    document.getElementById("questionMenu").innerHTML = document.getElementById("questionTemplate").innerHTML;
 }
 
 function gameInit() {
-    progressBarText = document.getElementById("progressBarText");
+    livesText = document.getElementById("livesText");
+    scoreText = document.getElementById("scoreText");
     progressedBar = document.getElementById("progressedBar");
 
     questionText = document.getElementById("questionText");
 
-    optionBtns = Array.from(document.getElementById('options').getElementsByClassName('optionBtn'));
+    optionBtns = Array.from(document.getElementById('options').getElementsByClassName('btn'));
     optionLabels = document.getElementById('options').getElementsByClassName('optionText');
 
     fiftyFiftyPowerupText = document.getElementById("fiftyFiftyPowerupText");
     doubleScorePowerupText = document.getElementById("doubleScorePowerupText");
     skipQuestionPowerupText = document.getElementById("skipQuestionPowerupText");
 }
-
