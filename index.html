@@ -14,7 +14,7 @@
 
         <div class="section" id="questionQuantitySelector">
             <label for="questionQuantity" class="labelText">Number of Questions: </label>
-            <input id="questionQuantity" type="number" value="10" min="5" max="50">
+            <input id="questionQuantity" type="number" value="10" min="1" max="50">
         </div>
 
         <div class="section">
@@ -36,7 +36,8 @@
         <div class="section">
             <div class="stats-display">
                 <p>Lives: <span id="livesText"></span></p>
-                <p>Question: <span id="scoreText"></span></p>
+                <p><span id="scoreText"></span></p>
+                <p>Question: <span id="questionNumberText"></span></p>
             </div>
 
             <div id="progressBar" class="progress-bar">
@@ -117,7 +118,12 @@
     </template>
 
     <template id="quizCompleteTemplate">
-        <h1>Your Final Score: 1000</h1>
+        <div class="section">
+            <h1>Congratulation</h1>
+            <p>You have made it to the end of the quiz.</p>
+        </div>
+
+        <h2>Your Final Score: <span id="scoreText"></span></h2>
     </template>
 
     <script src="index.js"></script>

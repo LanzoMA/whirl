@@ -1,4 +1,5 @@
 let livesText;
+let questionNumberText;
 let scoreText;
 let progressedBar;
 
@@ -9,6 +10,9 @@ let doubleScorePowerupText;
 let skipQuestionPowerupText;
 
 let lives;
+let score = 0;
+let scoreMultiplier = 1;
+let streak = 0;
 let answeredQuestions = 0;
 let totalQuestions;
 
@@ -159,7 +163,7 @@ async function getQuestionData() {
 }
 
 function updateProgressBar() {
-    scoreText.innerText = `${answeredQuestions + 1}/${totalQuestions}`
+    questionNumberText.innerText = `${answeredQuestions + 1}/${totalQuestions}`
     progressedBar.style.width = `${(answeredQuestions / totalQuestions) * 100}%`;
 }
 
@@ -167,8 +171,6 @@ function updateCurrentQuestion() {
     questionText.innerHTML = `${questions[answeredQuestions]['question']}`;
 
     correctOption = Math.floor(Math.random() * 4);
-
-    console.log(correctOption);
 
     optionLabels[correctOption].innerHTML = `${questions[answeredQuestions]['correct_answer']}`;
 
@@ -223,9 +225,17 @@ function skipQuestion() {
     }
 
     skipQuestionPowerupText.innerText = skips - 1;
+    streak = 0;
     answeredQuestions++;
 
     updateProgressBar()
+
+    if (answeredQuestions == totalQuestions) {
+        document.getElementById('questionMenu').innerHTML = document.getElementById('quizCompleteTemplate').innerHTML;
+        document.getElementById('scoreText').textContent = score;
+        return;
+    }
+
     updateCurrentQuestion()
 }
 
@@ -238,13 +248,14 @@ function selectOption(option) {
         optionBtns[option].classList.add('incorrect-selected');
         lives--;
         livesText.textContent = lives;
+        streak = 0;
 
         if (lives == 0) {
             optionBtns.forEach(optionBtn => {
                 optionBtn.disabled = true;
             })
 
-            let powerupsBtns = Array.from(document.getElementById('powerupContainer').getElementsByClassName('powerup'));
+            const powerupsBtns = Array.from(document.getElementById('powerupContainer').getElementsByClassName('powerup'));
 
             powerupsBtns.forEach(powerupsBtn => {
                 powerupsBtn.disabled = true;
@@ -252,17 +263,24 @@ function selectOption(option) {
 
             showCorrectAnswer();
 
-            window.alert(`Game over! You ran out of lives. You reached a score of ${answeredQuestions}`);
+            window.alert(`Game over! You ran out of lives. You reached a score of ${score}`);
         }
 
         return;
     }
 
+    score += 1000 * scoreMultiplier;
+    scoreText.textContent = score;
+    scoreMultiplier = (0.5 * Math.floor(Math.pow(2, 0.5 * streak))) + 1;
+
+    streak++;
     answeredQuestions++;
+
     updateProgressBar()
 
     if (answeredQuestions == totalQuestions) {
         document.getElementById('questionMenu').innerHTML = document.getElementById('quizCompleteTemplate').innerHTML;
+        document.getElementById('scoreText').textContent = score;
 
         return;
     }
@@ -273,7 +291,7 @@ function selectOption(option) {
 async function start() {
     totalQuestions = document.getElementById('questionQuantity').value;
 
-    if (totalQuestions > 50 || totalQuestions < 5 || totalQuestions === '') {
+    if (totalQuestions > 50 || totalQuestions < 1 || totalQuestions === '') {
         window.alert('Select the numbers of questions to be a value between 1 and 50');
         return;
     }
@@ -294,7 +312,22 @@ async function start() {
         .then(() => {
             updateProgressBar();
             updateCurrentQuestion();
-            lives = Math.round((totalQuestions / 10) * 3);
+
+            if (totalQuestions < 5) {
+                lives = 1;
+                fiftyFiftyPowerupText.textContent = 0;
+                doubleScorePowerupText.textContent = 0;
+                skipQuestionPowerupText.textContent = 0;
+            }
+
+            else {
+                lives = Math.round((totalQuestions / 10) * 3);
+                fiftyFiftyPowerupText.textContent = Math.round((totalQuestions / 10) * 2);
+                doubleScorePowerupText.textContent = Math.round((totalQuestions / 10) * 2);
+                skipQuestionPowerupText.textContent = Math.round((totalQuestions / 10) * 2);
+            }
+
+            scoreText.textContent = score;
             livesText.textContent = lives;
         })
         .catch((error) => console.error(error));
@@ -307,6 +340,7 @@ function updateHtml() {
 function gameInit() {
     livesText = document.getElementById("livesText");
     scoreText = document.getElementById("scoreText");
+    questionNumberText = document.getElementById("questionNumberText");
     progressedBar = document.getElementById("progressedBar");
 
     questionText = document.getElementById("questionText");
