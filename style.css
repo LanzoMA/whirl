@@ -93,13 +93,13 @@ h2 {
     background-color: var(--bright-surface-color);
 }
 
-.btn:disabled {
+.btn--highlighted:disabled {
     background-color: var(--disabled-color);
     color: var(--light-surface-color);
     cursor: default;
 }
 
-.btn:disabled:hover {
+.btn--highlighted:disabled:hover {
     background-color: var(--disabled-color);
 }
 
