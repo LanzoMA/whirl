@@ -50,13 +50,22 @@ const categories = [
 let categorySelected;
 let difficultySelected;
 
+let isCategorySelected = false;
+let isDifficultySelected = false;
+
+let startBtn;
+
 loadStartMenu();
 
 function loadStartMenu() {
     document.getElementById('questionMenu').innerHTML = document.getElementById('startMenu').innerHTML;
 
+    startBtn = document.getElementById('startBtn');
+    startBtn.disabled = true;
+
     addCategorySelectors();
     addDifficultySelectors();
+
 }
 
 function addCategorySelectors() {
@@ -77,6 +86,9 @@ function addCategorySelectors() {
                     }
 
                     categorySelected = undefined;
+                    isCategorySelected = false;
+
+                    startBtn.disabled = true;
                 }
 
                 else {
@@ -85,6 +97,9 @@ function addCategorySelectors() {
                     }
 
                     categorySelected = category
+                    isCategorySelected = true;
+
+                    if (isDifficultySelected) startBtn.disabled = false;
                 }
 
 
@@ -105,6 +120,9 @@ function addCategorySelectors() {
                 }
 
                 event.target.classList.toggle('enabled-selector');
+                isCategorySelected = true;
+
+                if (isDifficultySelected) startBtn.disabled = false;
             });
         }
 
@@ -131,6 +149,8 @@ function addDifficultySelectors() {
             }
 
             event.target.classList.add('enabled-selector');
+            isDifficultySelected = true;
+            if (isCategorySelected) startBtn.disabled = false;
         });
 
         document.getElementById("difficultiesSelector").appendChild(element);
