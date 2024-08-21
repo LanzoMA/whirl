@@ -6,6 +6,7 @@
     --light-surface-color: #b3afa7;
     --bright-surface-color: #e0dcd3;
     --green-color: #29ce60;
+    --light-green-color: #2eeb6d;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -60,6 +61,10 @@ body {
     }
 }
 
+.card__footer {
+    display: flex;
+}
+
 h1,
 h2 {
     text-align: center;
@@ -84,6 +89,14 @@ h2 {
 
 .btn:hover {
     background-color: var(--bright-surface-color);
+}
+
+.btn--highlighted {
+    background-color: var(--green-color);
+}
+
+.btn--highlighted:hover {
+    background-color: var(--light-green-color);
 }
 
 
@@ -151,9 +164,10 @@ h2 {
 
 /* Powerup Styling */
 
-.container {
+.powerup-container {
     display: flex;
     gap: 1em;
+    flex-grow: 1;
 }
 
 .powerup {

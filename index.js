@@ -268,6 +268,7 @@ function selectOption(option) {
             });
 
             showCorrectAnswer();
+            document.getElementById('gameContinueBtn').style.display = 'block';
 
             const gameOverModal = createModal('Game Over', 'You ran out of lives!');
             gameOverModal.showModal();
@@ -286,6 +287,8 @@ function selectOption(option) {
     updateProgressBar()
 
     if (answeredQuestions == totalQuestions) {
+        document.getElementById('gameContinueBtn').style.display = 'block';
+
         const quizCompleteModal = createModal('Congratulations', 'You have made it to the end of the quiz!')
         quizCompleteModal.showModal();
 
@@ -342,9 +345,13 @@ async function start() {
 
 function updateHtml() {
     document.getElementById("questionMenu").innerHTML = document.getElementById("questionTemplate").innerHTML;
+
+    document.getElementById('gameContinueBtn').style.display = 'none';
 }
 
 function gameInit() {
+    answeredQuestions = 0;
+
     livesText = document.getElementById("livesText");
     scoreText = document.getElementById("scoreText");
     questionNumberText = document.getElementById("questionNumberText");

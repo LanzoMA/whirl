@@ -35,63 +35,69 @@
     </template>
 
     <template id="questionTemplate">
-        <div class="section">
-            <div class="stats-display">
-                <p>Lives: <span id="livesText"></span></p>
-                <p><span id="scoreText"></span></p>
-                <p>Question: <span id="questionNumberText"></span></p>
+        <div class="card">
+            <div class="section">
+                <div class="stats-display">
+                    <p>Lives: <span id="livesText"></span></p>
+                    <p><span id="scoreText"></span></p>
+                    <p>Question: <span id="questionNumberText"></span></p>
+                </div>
+
+                <div id="progressBar" class="progress-bar">
+                    <div id="progressedBar" class="progress-bar-fill"></div>
+                </div>
             </div>
 
-            <div id="progressBar" class="progress-bar">
-                <div id="progressedBar" class="progress-bar-fill"></div>
+            <div id="question" class="section">
+                <p id="questionText" class="section"></p>
+
+                <div id="options">
+                    <button class="btn" onclick="selectOption(0)">
+                        <span class="optionText" id="optionLabel1"></span>
+                    </button>
+
+                    <button class="btn" onclick="selectOption(1)">
+                        <span class="optionText" id="optionLabel2"></span>
+                    </button>
+
+                    <button class="btn" onclick="selectOption(2)">
+                        <span class="optionText" id="optionLabel3"></span>
+                    </button>
+
+                    <button class="btn" onclick="selectOption(3)">
+                        <span class="optionText" id="optionLabel4"></span>
+                    </button>
+                </div>
             </div>
-        </div>
 
-        <div id="question" class="section">
-            <p id="questionText" class="section"></p>
+            <div class="card__footer">
+                <div id="powerupContainer" class="powerup-container">
+                    <button class="powerup" id="fiftyFiftyPowerup" onclick="fiftyFifty()">
+                        <span class="powerup-icon-small">50<br>50</span>
+                        <div class="powerupQuantity">
+                            <span id="fiftyFiftyPowerupText" class="small-text">2</span>
+                        </div>
+                    </button>
 
-            <div id="options">
-                <button class="btn" onclick="selectOption(0)">
-                    <span class="optionText" id="optionLabel1"></span>
-                </button>
+                    <button class="powerup" id="doubleScorePowerup" onclick="doubleScore()">
+                        <span class="powerup-icon-large">x2</span>
+                        <div class="powerupQuantity">
+                            <span id="doubleScorePowerupText" class="small-text">2</span>
+                        </div>
+                    </button>
 
-                <button class="btn" onclick="selectOption(1)">
-                    <span class="optionText" id="optionLabel2"></span>
-                </button>
+                    <button class="powerup" id="skipQuestionPowerup" onclick="skipQuestion()">
+                        <span class="powerup-icon-small">
+                            Skip
+                        </span>
+                        <div class="powerupQuantity">
+                            <span id="skipQuestionPowerupText" class="small-text">2</span>
+                        </div>
+                    </button>
+                </div>
 
-                <button class="btn" onclick="selectOption(2)">
-                    <span class="optionText" id="optionLabel3"></span>
-                </button>
-
-                <button class="btn" onclick="selectOption(3)">
-                    <span class="optionText" id="optionLabel4"></span>
-                </button>
+                <button id="gameContinueBtn" class="btn btn--highlighted" onclick="loadStartMenu()">Continue</button>
             </div>
-        </div>
-
-        <div id="powerupContainer" class="container">
-            <button class="powerup" id="fiftyFiftyPowerup" onclick="fiftyFifty()">
-                <span class="powerup-icon-small">50<br>50</span>
-                <div class="powerupQuantity">
-                    <span id="fiftyFiftyPowerupText" class="small-text">2</span>
-                </div>
-            </button>
-
-            <button class="powerup" id="doubleScorePowerup" onclick="doubleScore()">
-                <span class="powerup-icon-large">x2</span>
-                <div class="powerupQuantity">
-                    <span id="doubleScorePowerupText" class="small-text">2</span>
-                </div>
-            </button>
-
-            <button class="powerup" id="skipQuestionPowerup" onclick="skipQuestion()">
-                <span class="powerup-icon-small">
-                    Skip
-                </span>
-                <div class="powerupQuantity">
-                    <span id="skipQuestionPowerupText" class="small-text">2</span>
-                </div>
-            </button>
         </div>
     </template>
 
