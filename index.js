@@ -371,6 +371,7 @@ function updateHtml() {
 
 function gameInit() {
     answeredQuestions = 0;
+    score = 0;
 
     livesText = document.getElementById("livesText");
     scoreText = document.getElementById("scoreText");
