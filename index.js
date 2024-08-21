@@ -50,8 +50,14 @@ const categories = [
 let categorySelected;
 let difficultySelected;
 
-addCategorySelectors();
-addDifficultySelectors();
+loadStartMenu();
+
+function loadStartMenu() {
+    document.getElementById('questionMenu').innerHTML = document.getElementById('startMenu').innerHTML;
+
+    addCategorySelectors();
+    addDifficultySelectors();
+}
 
 function addCategorySelectors() {
     categories.forEach(category => {
