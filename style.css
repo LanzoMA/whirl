@@ -240,3 +240,60 @@ h2 {
 .incorrect-selected:hover {
     background-color: #ef1919;
 }
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-color);
+    background-color: var(--surface-color);
+    border: none;
+    border-radius: 1em;
+}
+
+.modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal__header {
+    display: flex;
+    justify-content: end;
+    padding: 0.5em;
+}
+
+.modal__body {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+.modal__body__text {
+    margin-bottom: 0.5em;
+}
+
+.modal__body__text--large {
+    margin: 0;
+    font-size: 4rem;
+}
+
+.modal__footer {
+    padding: 1em;
+}
+
+.modal__close-btn {
+    color: var(--text-color);
+    background-color: transparent;
+    font-size: 3rem;
+    border: none;
+    border-radius: 100%;
+    width: 1em;
+    height: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.5s ease;
+}
+
+.modal__close-btn:hover {
+    background-color: var(--light-surface-color);
+}

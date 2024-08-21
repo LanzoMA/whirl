@@ -263,7 +263,8 @@ function selectOption(option) {
 
             showCorrectAnswer();
 
-            window.alert(`Game over! You ran out of lives. You reached a score of ${score}`);
+            const gameOverModal = createModal('Game Over', 'You ran out of lives!');
+            gameOverModal.showModal();
         }
 
         return;
@@ -279,8 +280,8 @@ function selectOption(option) {
     updateProgressBar()
 
     if (answeredQuestions == totalQuestions) {
-        document.getElementById('questionMenu').innerHTML = document.getElementById('quizCompleteTemplate').innerHTML;
-        document.getElementById('scoreText').textContent = score;
+        const quizCompleteModal = createModal('Congratulations', 'You have made it to the end of the quiz!')
+        quizCompleteModal.showModal();
 
         return;
     }
@@ -351,4 +352,67 @@ function gameInit() {
     fiftyFiftyPowerupText = document.getElementById("fiftyFiftyPowerupText");
     doubleScorePowerupText = document.getElementById("doubleScorePowerupText");
     skipQuestionPowerupText = document.getElementById("skipQuestionPowerupText");
+
+}
+
+function createModal(titleText, reasonText) {
+    const modal = document.createElement('dialog');
+
+    const modalHeader = document.createElement('div');
+    const modalBody = document.createElement('div');
+    const modalFooter = document.createElement('div');
+
+    const closeBtn = document.createElement('button');
+
+    const titleElement = document.createElement('h1');
+    const reasonElement = document.createElement('p');
+    const textElement = document.createElement('p');
+
+    const scoreElement = document.createElement('h2');
+
+    const continueBtn = document.createElement('button');
+
+    closeBtn.innerHTML = '&times;';
+
+    titleElement.textContent = titleText;
+    reasonElement.textContent = reasonText;
+    textElement.textContent = 'You reached a final score of';
+    scoreElement.textContent = score;
+    continueBtn.textContent = 'Continue';
+
+    modal.classList.add('modal')
+    modalHeader.classList.add('modal__header');
+    modalBody.classList.add('modal__body');
+    modalFooter.classList.add('modal__footer');
+
+    closeBtn.classList.add('modal__close-btn');
+    reasonElement.classList.add('modal__body__text');
+    textElement.classList.add('modal__body__text');
+    scoreElement.classList.add('modal__body__text--large');
+    continueBtn.classList.add('btn');
+
+    closeBtn.onclick = () => {
+        modal.close();
+    };
+
+    continueBtn.onclick = () => {
+        modal.close();
+    };
+
+    modalHeader.appendChild(closeBtn);
+
+    modalBody.appendChild(titleElement);
+    modalBody.appendChild(reasonElement);
+    modalBody.appendChild(textElement);
+    modalBody.appendChild(scoreElement);
+
+    modalFooter.appendChild(continueBtn);
+
+    modal.appendChild(modalHeader);
+    modal.appendChild(modalBody);
+    modal.appendChild(modalFooter)
+
+    document.getElementById('questionMenu').appendChild(modal);
+
+    return modal;
 }
