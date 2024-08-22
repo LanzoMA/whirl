@@ -74,23 +74,39 @@
             <div class="card__footer">
                 <div id="powerupContainer" class="powerup-container">
                     <button class="powerup" id="fiftyFiftyPowerup" onclick="fiftyFifty()">
-                        <span class="powerup-icon-small">50<br>50</span>
+                        <svg class="powerup-icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                            viewBox="0 0 24 24">
+                            <g fill="none" stroke="white" stroke-width="1.5">
+                                <path
+                                    d="M3.04 4.294a.5.5 0 0 1 .191-.479C3.927 3.32 6.314 2 12 2s8.073 1.32 8.769 1.815a.5.5 0 0 1 .192.479l-1.7 12.744a4 4 0 0 1-1.98 2.944l-.32.183a10 10 0 0 1-9.922 0l-.32-.183a4 4 0 0 1-1.98-2.944z" />
+                                <path
+                                    d="M3 5c2.571 2.667 15.429 2.667 18 0M4 13c1.032 1.203 3.925 1.864 7 1.981a25.4 25.4 0 0 0 4-.158c2.266-.279 4.197-.886 5-1.823M4 13c2.286-2.667 13.714-2.667 16 0" />
+                            </g>
+                        </svg>
                         <div class="powerupQuantity">
                             <span id="fiftyFiftyPowerupText" class="small-text">2</span>
                         </div>
                     </button>
 
                     <button class="powerup" id="doubleScorePowerup" onclick="doubleScore()">
-                        <span class="powerup-icon-large">x2</span>
+                        <svg class="powerup-icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                            viewBox="0 0 14 14">
+                            <path fill="white" fill-rule="evenodd"
+                                d="M1.898 10.778A1 1 0 0 1 .483 9.363l3.333-3.332l.007-.007a1.457 1.457 0 0 1 2.039 0l.007.007L7.57 7.732L9.917 5.25l-1.04-1.04a.75.75 0 0 1 .53-1.28h3.652a.75.75 0 0 1 .75.75v3.652a.75.75 0 0 1-1.28.53l-1.197-1.198l-2.704 2.861a1.457 1.457 0 0 1-2.066.027l-.007-.007l-1.713-1.712z"
+                                clip-rule="evenodd" />
+                        </svg>
                         <div class="powerupQuantity">
                             <span id="doubleScorePowerupText" class="small-text">2</span>
                         </div>
                     </button>
 
                     <button class="powerup" id="skipQuestionPowerup" onclick="skipQuestion()">
-                        <span class="powerup-icon-small">
-                            Skip
-                        </span>
+                        <svg class="powerup-icon" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                            viewBox="0 0 256 256">
+                            <path fill="white"
+                                d="M208 40v176a8 8 0 0 1-16 0v-69.23L72.43 221.55A15.95 15.95 0 0 1 48 208.12V47.88a15.95 15.95 0 0 1 24.43-13.43L192 109.23V40a8 8 0 0 1 16 0" />
+                        </svg>
+
                         <div class="powerupQuantity">
                             <span id="skipQuestionPowerupText" class="small-text">2</span>
                         </div>
