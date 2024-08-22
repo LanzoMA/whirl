@@ -1,7 +1,8 @@
 let livesText;
-let questionNumberText;
+let streakText;
 let scoreText;
 let scoreMultiplierWidget;
+let questionNumberText;
 let progressedBar;
 
 let questionText;
@@ -283,6 +284,7 @@ function fiftyFifty() {
 function doubleScore() {
     doubleScorePowerupWidget.use(() => {
         streak += 2;
+        streakText.textContent = streak;
         scoreMultiplierWidget.update(streak);
     });
 }
@@ -309,9 +311,13 @@ function showCorrectAnswer() {
 function selectOption(option) {
     if (option != correctOption) {
         optionBtns[option].classList.add('incorrect-selected');
+
         lives--;
         livesText.textContent = lives;
+
         streak = 0;
+        streakText.textContent = streak;
+
         scoreMultiplierWidget.reset();
         optionsToBeNotHidden.push(option);
 
@@ -340,6 +346,8 @@ function selectOption(option) {
     scoreText.textContent = score;
 
     streak++;
+    streakText.textContent = streak;
+
     answeredQuestions++;
 
     scoreMultiplierWidget.update(streak);
@@ -398,6 +406,10 @@ function loadQuestionPage() {
     score = 0;
 
     livesText = document.getElementById("livesText");
+
+    streakText = document.getElementById('streakText');
+    streakText.textContent = streak;
+
     scoreText = document.getElementById("scoreText");
     scoreText.textContent = score;
 
