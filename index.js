@@ -6,9 +6,10 @@ let progressedBar;
 
 let questionText;
 let optionBtns;
-let fiftyFiftyPowerupText;
-let doubleScorePowerupText;
-let skipQuestionPowerupText;
+
+let fiftyFiftyPowerupWidget;
+let doubleScorePowerupWidget;
+let skipQuestionPowerupWidget;
 
 let lives;
 let score = 0;
@@ -72,6 +73,25 @@ class ScoreMultiplierWidget {
     reset() {
         this.scoreMultiplier = 1;
         this.element.textContent = this.scoreMultiplier;
+    }
+}
+
+class PowerupWidget {
+    constructor(element) {
+        this.uses = (totalQuestions < 5) ? 0 : Math.round((totalQuestions / 10) * 2);
+        this.element = element;
+    }
+
+    use(callback) {
+        if (this.uses < 1) {
+            window.alert("No more uses!");
+            return;
+        }
+
+        this.uses--;
+        this.element.textContent = this.uses;
+
+        callback();
     }
 }
 
@@ -242,72 +262,44 @@ function updateCurrentQuestion() {
 }
 
 function fiftyFifty() {
-    const uses = Number(fiftyFiftyPowerupText.innerHTML);
+    fiftyFiftyPowerupWidget.use(() => {
+        let randomOption;
 
-    if (uses < 1) {
-        window.alert('No more fifty fifty powerups');
-        return;
-    }
+        const numberOfOptionsToBeHidden = Math.ceil((4 - optionsToBeNotHidden.length) / 2);
 
-    fiftyFiftyPowerupText.innerHTML = uses - 1;
+        for (let i = 0; i < numberOfOptionsToBeHidden; i++) {
+            do {
+                randomOption = Math.floor(Math.random() * 4);
+            }
+            while (optionsToBeNotHidden.includes(randomOption));
 
-    let randomOption;
+            optionBtns[randomOption].disabled = true;
 
-    const numberOfOptionsToBeHidden = Math.ceil((4 - optionsToBeNotHidden.length) / 2);
-
-    for (let i = 0; i < numberOfOptionsToBeHidden; i++) {
-        do {
-            randomOption = Math.floor(Math.random() * 4);
+            optionsToBeNotHidden.push(randomOption);
         }
-        while (optionsToBeNotHidden.includes(randomOption));
-
-        optionBtns[randomOption].disabled = true;
-
-        optionsToBeNotHidden.push(randomOption);
-    }
+    });
 }
 
 function doubleScore() {
-    const uses = Number(doubleScorePowerupText.innerHTML);
-
-    if (uses < 1) {
-        window.alert('No more double score powerups');
-        return;
-    }
-
-    doubleScorePowerupText.innerHTML = uses - 1;
-
-    streak += 2;
-    scoreMultiplierWidget.update(streak);
-    updateProgressBar();
+    doubleScorePowerupWidget.use(() => {
+        streak += 2;
+        scoreMultiplierWidget.update(streak);
+    });
 }
 
-
 function skipQuestion() {
-    const skips = Number(skipQuestionPowerupText.innerText)
+    skipQuestionPowerupWidget.use(() => {
+        answeredQuestions++;
 
-    if (skips < 1) {
-        window.alert('No more skips!')
-        return
-    }
+        updateProgressBar();
 
-    if (answeredQuestions == totalQuestions) {
-        quizComplete = true
-        return
-    }
+        if (answeredQuestions == totalQuestions) {
+            loadQuizCompletion();
+            return;
+        }
 
-    skipQuestionPowerupText.innerText = skips - 1;
-    answeredQuestions++;
-
-    updateProgressBar()
-
-    if (answeredQuestions == totalQuestions) {
-        document.getElementById('questionMenu').innerHTML = document.getElementById('quizCompleteTemplate').innerHTML;
-        document.getElementById('scoreText').textContent = score;
-        return;
-    }
-
-    updateCurrentQuestion()
+        updateCurrentQuestion()
+    });
 }
 
 function showCorrectAnswer() {
@@ -354,11 +346,7 @@ function selectOption(option) {
     updateProgressBar()
 
     if (answeredQuestions == totalQuestions) {
-        document.getElementById('gameContinueBtn').style.display = 'block';
-
-        const quizCompleteModal = createModal('Congratulations', 'You have made it to the end of the quiz!')
-        quizCompleteModal.showModal();
-
+        loadQuizCompletion();
         return;
     }
 
@@ -372,7 +360,6 @@ async function start() {
         window.alert('Select the numbers of questions to be a value between 1 and 50');
         return;
     }
-
 
     if (categorySelected === undefined) {
         window.alert('A category has not been selected');
@@ -392,16 +379,10 @@ async function start() {
 
             if (totalQuestions < 5) {
                 lives = 1;
-                fiftyFiftyPowerupText.textContent = 0;
-                doubleScorePowerupText.textContent = 0;
-                skipQuestionPowerupText.textContent = 0;
             }
 
             else {
                 lives = Math.round((totalQuestions / 10) * 3);
-                fiftyFiftyPowerupText.textContent = Math.round((totalQuestions / 10) * 2);
-                doubleScorePowerupText.textContent = Math.round((totalQuestions / 10) * 2);
-                skipQuestionPowerupText.textContent = Math.round((totalQuestions / 10) * 2);
             }
 
             livesText.textContent = lives;
@@ -430,9 +411,14 @@ function loadQuestionPage() {
     optionBtns = Array.from(document.getElementById('options').getElementsByClassName('btn'));
     optionLabels = document.getElementById('options').getElementsByClassName('optionText');
 
-    fiftyFiftyPowerupText = document.getElementById("fiftyFiftyPowerupText");
-    doubleScorePowerupText = document.getElementById("doubleScorePowerupText");
-    skipQuestionPowerupText = document.getElementById("skipQuestionPowerupText");
+    fiftyFiftyPowerupWidget = new PowerupWidget(document.getElementById("fiftyFiftyPowerupText"));
+    doubleScorePowerupWidget = new PowerupWidget(document.getElementById("doubleScorePowerupText"));
+    skipQuestionPowerupWidget = new PowerupWidget(document.getElementById("skipQuestionPowerupText"));
+}
+
+function loadQuizCompletion() {
+    document.getElementById('gameContinueBtn').style.display = 'block';
+    createModal('Congratulations', 'You have made it to the end of the quiz!').showModal();
 }
 
 function createModal(titleText, reasonText) {
