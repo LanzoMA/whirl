@@ -20,6 +20,7 @@ let quizComplete = false;
 
 let questions;
 let correctOption;
+let optionsToBeNotHidden;
 
 const categories = [
     "Any Category",
@@ -194,9 +195,17 @@ function updateProgressBar() {
 }
 
 function updateCurrentQuestion() {
+    optionBtns.forEach(optionBtn => {
+        optionBtn.disabled = false;
+    });
+
+    optionsToBeNotHidden = [];
+
     questionText.innerHTML = `${questions[answeredQuestions]['question']}`;
 
     correctOption = Math.floor(Math.random() * 4);
+
+    optionsToBeNotHidden.push(correctOption);
 
     optionLabels[correctOption].innerHTML = `${questions[answeredQuestions]['correct_answer']}`;
 
@@ -223,6 +232,21 @@ function fiftyFifty() {
     }
 
     fiftyFiftyPowerupText.innerHTML = uses - 1;
+
+    let randomOption;
+
+    const numberOfOptionsToBeHidden = Math.ceil((4 - optionsToBeNotHidden.length) / 2);
+
+    for (let i = 0; i < numberOfOptionsToBeHidden; i++) {
+        do {
+            randomOption = Math.floor(Math.random() * 4);
+        }
+        while (optionsToBeNotHidden.includes(randomOption));
+
+        optionBtns[randomOption].disabled = true;
+
+        optionsToBeNotHidden.push(randomOption);
+    }
 }
 
 function doubleScore() {
@@ -275,6 +299,7 @@ function selectOption(option) {
         lives--;
         livesText.textContent = lives;
         streak = 0;
+        optionsToBeNotHidden.push(option);
 
         if (lives == 0) {
             optionBtns.forEach(optionBtn => {
