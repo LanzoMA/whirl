@@ -236,6 +236,7 @@ function updateProgressBar() {
 function updateCurrentQuestion() {
     optionBtns.forEach(optionBtn => {
         optionBtn.disabled = false;
+        optionBtn.classList.remove('incorrect-selected');
     });
 
     optionsToBeNotHidden = [];
@@ -256,10 +257,6 @@ function updateCurrentQuestion() {
         optionLabels[i].innerHTML = `${questions[answeredQuestions]['incorrect_answers'][optionsComplete]}`;
         optionsComplete++;
     }
-
-    optionBtns.forEach(optionBtn => {
-        optionBtn.classList.remove('incorrect-selected');
-    })
 }
 
 function fiftyFifty() {
