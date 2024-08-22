@@ -1,7 +1,7 @@
 let livesText;
 let questionNumberText;
 let scoreText;
-let scoreMultiplierText;
+let scoreMultiplierWidget;
 let progressedBar;
 
 let questionText;
@@ -57,6 +57,24 @@ let isDifficultySelected = false;
 
 let startBtn;
 
+class ScoreMultiplierWidget {
+    constructor(element) {
+        this.scoreMultiplier = 1;
+        this.element = element;
+        this.element.textContent = this.scoreMultiplier;
+    }
+
+    update(streak) {
+        this.scoreMultiplier = Math.min((0.5 * Math.floor(Math.pow(2, 0.5 * streak))) + 1, 25);
+        this.element.textContent = this.scoreMultiplier;
+    }
+
+    reset() {
+        this.scoreMultiplier = 1;
+        this.element.textContent = this.scoreMultiplier;
+    }
+}
+
 loadStartMenu();
 
 function loadStartMenu() {
@@ -67,7 +85,6 @@ function loadStartMenu() {
 
     addCategorySelectors();
     addDifficultySelectors();
-
 }
 
 function addCategorySelectors() {
@@ -193,7 +210,6 @@ async function getQuestionData() {
 function updateProgressBar() {
     questionNumberText.innerText = `${answeredQuestions + 1}/${totalQuestions}`
     progressedBar.style.width = `${(answeredQuestions / totalQuestions) * 100}%`;
-    scoreMultiplierText.textContent = scoreMultiplier;
 }
 
 function updateCurrentQuestion() {
@@ -261,8 +277,8 @@ function doubleScore() {
 
     doubleScorePowerupText.innerHTML = uses - 1;
 
-    scoreMultiplier *= 2;
-
+    streak += 2;
+    scoreMultiplierWidget.update(streak);
     updateProgressBar();
 }
 
@@ -281,7 +297,6 @@ function skipQuestion() {
     }
 
     skipQuestionPowerupText.innerText = skips - 1;
-    streak = 0;
     answeredQuestions++;
 
     updateProgressBar()
@@ -305,6 +320,7 @@ function selectOption(option) {
         lives--;
         livesText.textContent = lives;
         streak = 0;
+        scoreMultiplierWidget.reset();
         optionsToBeNotHidden.push(option);
 
         if (lives == 0) {
@@ -330,11 +346,11 @@ function selectOption(option) {
 
     score += 1000 * scoreMultiplier;
     scoreText.textContent = score;
-    scoreMultiplier += (0.5 * Math.floor(Math.pow(2, 0.5 * streak))) + 1;
 
     streak++;
     answeredQuestions++;
 
+    scoreMultiplierWidget.update(streak);
     updateProgressBar()
 
     if (answeredQuestions == totalQuestions) {
@@ -368,7 +384,8 @@ async function start() {
         return;
     }
 
-    getQuestionData().then(updateHtml)
+    getQuestionData()
+        .then(updateHtml)
         .then(gameInit)
         .then(() => {
             updateProgressBar();
@@ -389,7 +406,6 @@ async function start() {
             }
 
             scoreText.textContent = score;
-            scoreMultiplierText.textContent = scoreMultiplier;
             livesText.textContent = lives;
         })
         .catch((error) => console.error(error));
@@ -407,7 +423,9 @@ function gameInit() {
 
     livesText = document.getElementById("livesText");
     scoreText = document.getElementById("scoreText");
-    scoreMultiplierText = document.getElementById('scoreMultiplierText');
+
+    scoreMultiplierWidget = new ScoreMultiplierWidget(document.getElementById('scoreMultiplierText'));
+
     questionNumberText = document.getElementById("questionNumberText");
     progressedBar = document.getElementById("progressedBar");
 
