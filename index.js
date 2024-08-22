@@ -1,6 +1,7 @@
 let livesText;
 let questionNumberText;
 let scoreText;
+let scoreMultiplierText;
 let progressedBar;
 
 let questionText;
@@ -192,6 +193,7 @@ async function getQuestionData() {
 function updateProgressBar() {
     questionNumberText.innerText = `${answeredQuestions + 1}/${totalQuestions}`
     progressedBar.style.width = `${(answeredQuestions / totalQuestions) * 100}%`;
+    scoreMultiplierText.textContent = scoreMultiplier;
 }
 
 function updateCurrentQuestion() {
@@ -383,6 +385,7 @@ async function start() {
             }
 
             scoreText.textContent = score;
+            scoreMultiplierText.textContent = scoreMultiplier;
             livesText.textContent = lives;
         })
         .catch((error) => console.error(error));
@@ -400,6 +403,7 @@ function gameInit() {
 
     livesText = document.getElementById("livesText");
     scoreText = document.getElementById("scoreText");
+    scoreMultiplierText = document.getElementById('scoreMultiplierText');
     questionNumberText = document.getElementById("questionNumberText");
     progressedBar = document.getElementById("progressedBar");
 
