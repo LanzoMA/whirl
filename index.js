@@ -385,8 +385,7 @@ async function start() {
     }
 
     getQuestionData()
-        .then(updateHtml)
-        .then(gameInit)
+        .then(loadQuestionPage)
         .then(() => {
             updateProgressBar();
             updateCurrentQuestion();
@@ -405,24 +404,21 @@ async function start() {
                 skipQuestionPowerupText.textContent = Math.round((totalQuestions / 10) * 2);
             }
 
-            scoreText.textContent = score;
             livesText.textContent = lives;
         })
         .catch((error) => console.error(error));
 }
 
-function updateHtml() {
+function loadQuestionPage() {
     document.getElementById("questionMenu").innerHTML = document.getElementById("questionTemplate").innerHTML;
-
     document.getElementById('gameContinueBtn').style.display = 'none';
-}
 
-function gameInit() {
     answeredQuestions = 0;
     score = 0;
 
     livesText = document.getElementById("livesText");
     scoreText = document.getElementById("scoreText");
+    scoreText.textContent = score;
 
     scoreMultiplierWidget = new ScoreMultiplierWidget(document.getElementById('scoreMultiplierText'));
 
@@ -437,7 +433,6 @@ function gameInit() {
     fiftyFiftyPowerupText = document.getElementById("fiftyFiftyPowerupText");
     doubleScorePowerupText = document.getElementById("doubleScorePowerupText");
     skipQuestionPowerupText = document.getElementById("skipQuestionPowerupText");
-
 }
 
 function createModal(titleText, reasonText) {
