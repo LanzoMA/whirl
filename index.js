@@ -260,6 +260,10 @@ function doubleScore() {
     }
 
     doubleScorePowerupText.innerHTML = uses - 1;
+
+    scoreMultiplier *= 2;
+
+    updateProgressBar();
 }
 
 
@@ -326,7 +330,7 @@ function selectOption(option) {
 
     score += 1000 * scoreMultiplier;
     scoreText.textContent = score;
-    scoreMultiplier = (0.5 * Math.floor(Math.pow(2, 0.5 * streak))) + 1;
+    scoreMultiplier += (0.5 * Math.floor(Math.pow(2, 0.5 * streak))) + 1;
 
     streak++;
     answeredQuestions++;
