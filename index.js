@@ -336,7 +336,7 @@ function selectOption(option) {
         return;
     }
 
-    score += 1000 * scoreMultiplier;
+    score += 1000 * scoreMultiplierWidget.scoreMultiplier;
     scoreText.textContent = score;
 
     streak++;
